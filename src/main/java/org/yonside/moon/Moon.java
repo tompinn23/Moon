@@ -12,8 +12,7 @@ import cpw.mods.fml.common.event.*;
     version = Tags.VERSION,
     name = "Moon",
     dependencies = "required-after:gregtech;" + "required-after:bartworks;"
-        + "required-after:gtnhintergalactic;"
-        + "required-after:appliedenergistics2;",
+        + "required-after:gtnhintergalactic;",
     acceptedMinecraftVersions = "[1.7.10]")
 public class Moon {
 

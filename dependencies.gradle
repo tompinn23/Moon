@@ -37,12 +37,12 @@
 dependencies {
     //runtimeOnlyNonPublishable("com.github.GTNewHorizons:NotEnoughItems:2.7.69-GTNH:dev")
 //    implementation(gtnh("GT5-Unofficial", "dev"))
-    implementation(variantOf(gtnh.newHorizonsCoreMod) { classifier("dev") })
     implementation(variantOf(gtnh.gt5Unofficial) { classifier("dev") })
-    implementation(variantOf(gtnh.appliedEnergistics2Unofficial) { classifier("dev") })
+    compileOnly(variantOf(gtnh.appliedEnergistics2Unofficial) { classifier("dev") })
 
     shadowCompile("com.electronwill.night-config:toml:3.9.0")
 
+    runtimeOnlyNonPublishable(gtnh.newHorizonsCoreMod)
     runtimeOnlyNonPublishable(gtnh.avaritia)
     runtimeOnlyNonPublishable(gtnh.computronics)
     runtimeOnlyNonPublishable(gtnh.draconicEvolution)

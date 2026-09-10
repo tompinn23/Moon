@@ -51,8 +51,16 @@ public class RecipeEditor<B extends RecipeMapBackend> {
         this.recipeMap = recipeMap;
     }
 
+    private static final Map<RecipeMap<?>, RecipeEditor<?>> INSTANCES = new ConcurrentHashMap<>();
+
+    @SuppressWarnings("unchecked")
     public static <B extends RecipeMapBackend> RecipeEditor<B> of(RecipeMap<B> recipeMap) {
-        return new RecipeEditor<>(recipeMap);
+        return (RecipeEditor<B>) INSTANCES.computeIfAbsent(recipeMap, r -> new RecipeEditor<>((RecipeMap<B>) r));
+    }
+
+
+    public static void run() {
+        INSTANCES.forEach((k, v) -> v.apply());
     }
 
     /** Log what would change, change nothing. */

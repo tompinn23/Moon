@@ -21,6 +21,9 @@
 verbose = true
 fail-fast = true
 
+[features]
+enabled = ["voidminer", "ae2-downtier"]
+
 [presets]
 titanium-to-aluminium = [
     ["plateTitanium", "plateAluminium"],

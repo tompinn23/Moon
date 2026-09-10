@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8.5-GTNH",
+  "refmap": "mixins.moon.refmap.json",
+  "target": "@env(DEFAULT)",
+  "compatibilityLevel": "JAVA_8",
+  "package": "org.yonside.moon.mixins",
+  "plugin": "org.yonside.moon.mixins.MixinConfig",
+  "mixins": [
+    "voidminer.MixinVoidMinerCasings",
+    "voidminer.MixinVoidMinerTier"
+  ]
+}

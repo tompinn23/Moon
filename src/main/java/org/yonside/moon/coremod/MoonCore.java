@@ -7,10 +7,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
+import org.yonside.moon.config.CoreConfig;
 
 @IFMLLoadingPlugin.MCVersion("1.7.10")
 @IFMLLoadingPlugin.SortingIndex(1001)
-@IFMLLoadingPlugin.TransformerExclusions({ "org.yonside.moon.coremod." })
+@IFMLLoadingPlugin.TransformerExclusions({ "org.yonside.moon.coremod.", "org.yonside.moon.config." })
 public class MoonCore implements IFMLLoadingPlugin {
 
     public static final Logger LOG = LogManager.getLogger("MoonCore");
@@ -36,13 +37,13 @@ public class MoonCore implements IFMLLoadingPlugin {
         File configDir = new File(mcLocation, "config");
         configDir.mkdir();
 
-        Config.loadFrom(configDir);
+        CoreConfig.loadFrom(configDir);
         LOG.info("MoonCore loaded!");
         LOG.info(
             "MoonCore is going to transform the following NHCM scripts: {}",
-            Config.rulesByClass()
+            CoreConfig.rulesByClass()
                 .keySet());
-        NHCMScriptTransformer.setRules(Config.rulesByClass());
+        NHCMScriptTransformer.setRules(CoreConfig.rulesByClass());
     }
 
     @Override

@@ -1,15 +1,11 @@
 package org.yonside.moon;
 
-import java.util.Arrays;
-import java.util.Objects;
-
-import org.yonside.moon.mod.AppliedEnergistics2;
-
 import cpw.mods.fml.common.event.*;
-import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
-import gregtech.api.enums.VoltageIndex;
 import gregtech.api.recipe.RecipeMaps;
+import org.yonside.moon.config.CoreConfig;
+import org.yonside.moon.config.Feature;
+import org.yonside.moon.mod.AppliedEnergistics2;
 
 public class CommonProxy {
 
@@ -20,6 +16,8 @@ public class CommonProxy {
 
         Moon.LOG.info(Config.greeting);
         Moon.LOG.info("I am MyMod at version " + Tags.VERSION);
+
+        MoonMaterials.init();
     }
 
     // load "Do your mod setup. Build whatever data structures you care about. Register recipes." (Remove if not needed)
@@ -29,20 +27,13 @@ public class CommonProxy {
     public void postInit(FMLPostInitializationEvent event) {}
 
     public void loadComplete(FMLLoadCompleteEvent event) {
+        if(Mods.AppliedEnergistics2.isModLoaded()) AppliedEnergistics2.loadComplete(event);
+        if(CoreConfig.isEnabled(Feature.VOIDMINER)) {
+            RecipeEditor.of(RecipeMaps.assemblerRecipes);
+        }
 
-        RecipeEditor.of(RecipeMaps.assemblerRecipes)
-            .edit("AE2 controller")
-            .matching(
-                r -> Arrays.stream(r.mOutputs)
-                    .allMatch(i -> Objects.equals(RecipeEditor.modIdOf(i), Mods.AppliedEnergistics2.getID())))
-            .swapMaterial(Materials.Titanium, Materials.Aluminium)
-            .swapMaterial(Materials.HV, Materials.MV)
-            .swapVoltage(VoltageIndex.HV, VoltageIndex.MV)
-            .queue()
-            .apply();
 
-        if (Mods.AppliedEnergistics2.isModLoaded()) AppliedEnergistics2.loadComplete(event);
-
+        RecipeEditor.run();
     }
 
     // register server commands in this event handler (Remove if not needed)

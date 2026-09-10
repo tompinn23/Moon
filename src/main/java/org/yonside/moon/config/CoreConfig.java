@@ -1,4 +1,4 @@
-package org.yonside.moon.coremod;
+package org.yonside.moon.config;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -7,17 +7,21 @@ import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 import com.electronwill.nightconfig.toml.TomlFormat;
+import org.yonside.moon.coremod.MoonCore;
 
-public final class Config {
+public final class CoreConfig {
 
     private static final String FILE_NAME = "mooncore.toml";
 
     private static List<Rule> rules = Collections.emptyList();
     private static Map<String, List<Rule>> byClass = Collections.emptyMap();
+    private static Set<Feature> features = Collections.emptySet();
     private static boolean verbose = true;
     private static boolean failFast = true;
 
-    private Config() {}
+    private static boolean loaded = false;
+
+    private CoreConfig() {}
 
     public static List<Rule> rules() {
         return rules;
@@ -33,6 +37,10 @@ public final class Config {
 
     public static boolean failFast() {
         return failFast;
+    }
+
+    public static boolean isEnabled(Feature feature) {
+        return features.contains(feature);
     }
 
     // ---- model --------------------------------------------------------
@@ -105,6 +113,7 @@ public final class Config {
 
     /** Called from FMLPlugin.injectData with the "configDir" value. */
     public static void loadFrom(File configDir) {
+        if(loaded) return;
         File config = new File(configDir, FILE_NAME);
 
         if (!config.exists()) {
@@ -123,6 +132,17 @@ public final class Config {
 
         verbose = toml.getOrElse("options.verbose", true);
         failFast = toml.getOrElse("options.fail-fast", true);
+
+        List<String> enabledFeatures = toml.getOrElse("features.enabled", Collections.emptyList());
+        for (String feature : enabledFeatures) {
+            try {
+                Feature val = Feature.valueOf(feature.replace('-', '_').toUpperCase(Locale.ROOT));
+                features.add(val);
+            } catch (IllegalArgumentException e) {
+                MoonCore.LOG.warn("unrecognized feature {}", feature);
+            }
+        }
+
 
         Map<String, Map<String, String>> presets = readPresets(toml);
         byClass = groupByClass(readRules(toml, presets));
@@ -255,7 +275,7 @@ public final class Config {
             MoonCore.LOG.warn("could not create {}", dir.getPath());
             return;
         }
-        try (InputStream in = Config.class.getResourceAsStream("/coremod/mooncore.toml")) {
+        try (InputStream in = CoreConfig.class.getResourceAsStream("/coremod/mooncore.toml")) {
             if (in == null) {
                 throw new IllegalStateException(
                     "[patch] missing bundled resource /coremod/mooncore.toml - check src/main/resources");

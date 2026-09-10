@@ -11,6 +11,7 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
+import org.yonside.moon.config.CoreConfig;
 
 /**
  * Rewrites String constants (LDC) and static field references (GETSTATIC)
@@ -21,16 +22,16 @@ import org.objectweb.asm.tree.*;
  */
 public class NHCMScriptTransformer implements IClassTransformer {
 
-    private static volatile Map<String, List<Config.Rule>> byClass = Collections.emptyMap();
+    private static volatile Map<String, List<CoreConfig.Rule>> byClass = Collections.emptyMap();
 
-    static void setRules(Map<String, List<Config.Rule>> rules) {
+    static void setRules(Map<String, List<CoreConfig.Rule>> rules) {
         byClass = rules;
     }
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
         if (basicClass == null) return null;
-        List<Config.Rule> applicable = byClass.get(transformedName);
+        List<CoreConfig.Rule> applicable = byClass.get(transformedName);
         if (applicable == null) return basicClass;
 
         ClassReader cr = new ClassReader(basicClass);
@@ -38,7 +39,7 @@ public class NHCMScriptTransformer implements IClassTransformer {
         cr.accept(cn, 0);
 
         boolean changed = false;
-        for (Config.Rule rule : applicable) {
+        for (CoreConfig.Rule rule : applicable) {
             changed |= apply(rule, cn);
         }
         if (!changed) return basicClass;
@@ -50,7 +51,7 @@ public class NHCMScriptTransformer implements IClassTransformer {
 
     // ---- rule application ---------------------------------------------
 
-    private static boolean apply(Config.Rule rule, ClassNode cn) {
+    private static boolean apply(CoreConfig.Rule rule, ClassNode cn) {
         int swaps = 0;
         int regionsTouched = 0;
 
@@ -73,7 +74,7 @@ public class NHCMScriptTransformer implements IClassTransformer {
 
                     } else if (insn.getOpcode() == Opcodes.GETSTATIC) {
                         FieldInsnNode f = (FieldInsnNode) insn;
-                        if (rule.fieldSwaps.containsKey(new Config.FieldRef(f.owner, f.name))) pending.add(insn);
+                        if (rule.fieldSwaps.containsKey(new CoreConfig.FieldRef(f.owner, f.name))) pending.add(insn);
                     }
                 }
 
@@ -90,7 +91,7 @@ public class NHCMScriptTransformer implements IClassTransformer {
         String complaint = rule.checkCount(swaps);
         if (complaint != null) {
             String message = "[patch] " + rule + ": " + complaint + " - the target has moved under the patch";
-            if (Config.failFast()) throw new IllegalStateException(message);
+            if (CoreConfig.failFast()) throw new IllegalStateException(message);
             MoonCore.LOG.error(message);
             // note: rewrites already applied to this ClassNode are kept
         }
@@ -99,18 +100,18 @@ public class NHCMScriptTransformer implements IClassTransformer {
         return swaps > 0;
     }
 
-    private static void rewrite(Config.Rule rule, ClassNode cn, MethodNode mn, AbstractInsnNode insn) {
+    private static void rewrite(CoreConfig.Rule rule, ClassNode cn, MethodNode mn, AbstractInsnNode insn) {
         if (insn instanceof LdcInsnNode) {
             LdcInsnNode ldc = (LdcInsnNode) insn;
             String from = (String) ldc.cst;
             ldc.cst = rule.stringSwaps.get(from);
-            if (Config.verbose()) {
+            if (CoreConfig.verbose()) {
                 MoonCore.LOG.info("  {}.{}: \"{}\" -> \"{}\"", cn.name, mn.name, from, ldc.cst);
             }
         } else {
             FieldInsnNode f = (FieldInsnNode) insn;
-            Config.FieldRef to = rule.fieldSwaps.get(new Config.FieldRef(f.owner, f.name));
-            if (Config.verbose()) {
+            CoreConfig.FieldRef to = rule.fieldSwaps.get(new CoreConfig.FieldRef(f.owner, f.name));
+            if (CoreConfig.verbose()) {
                 MoonCore.LOG.info("  {}.{}: {}.{} -> {}", cn.name, mn.name, f.owner, f.name, to);
             }
             f.owner = to.owner;
@@ -126,7 +127,7 @@ public class NHCMScriptTransformer implements IClassTransformer {
      * which for a varargs registration call covers exactly that call's
      * arguments, since evaluation is left to right.
      */
-    private static List<int[]> regionsOf(Config.Rule rule, AbstractInsnNode[] insns) {
+    private static List<int[]> regionsOf(CoreConfig.Rule rule, AbstractInsnNode[] insns) {
         List<int[]> regions = new ArrayList<>();
         if (rule.sites.isEmpty()) {
             regions.add(new int[] { 0, insns.length });
@@ -141,7 +142,7 @@ public class NHCMScriptTransformer implements IClassTransformer {
         return regions;
     }
 
-    private static boolean isSite(Config.Rule rule, AbstractInsnNode insn) {
+    private static boolean isSite(CoreConfig.Rule rule, AbstractInsnNode insn) {
         int op = insn.getOpcode();
         if (op != Opcodes.INVOKEVIRTUAL && op != Opcodes.INVOKEINTERFACE && op != Opcodes.INVOKESTATIC) {
             return false;

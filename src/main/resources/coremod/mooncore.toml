@@ -1,0 +1,54 @@
+# Bytecode constant patches, applied at class load.
+#
+# [options] and [presets] MUST come before the first [[rule]] - TOML binds
+# every key after a table header to that table until the next header.
+#
+# Rule keys:
+#   name     label used in logs and errors (default: the class name)
+#   class    fully qualified target class          (required)
+#   methods  only scan these methods               (default: all)
+#   sites    split methods into regions ending at calls to these
+#   require  only rewrite a region containing one of these constants
+#   use      preset names to pull swaps from
+#   swap     [[from, to], ...] String constants (LDC)
+#   field    [[own/Cls.F, own/Cls.F], ...] static field refs (GETSTATIC)
+#   expect   exact swap count; omit to use expect-min
+#   enabled  false to skip without deleting     (default: true)
+#
+# Field owners use slashes. Descriptors must be unchanged.
+
+[options]
+verbose = true
+fail-fast = true
+
+[presets]
+titanium-to-aluminium = [
+    ["plateTitanium", "plateAluminium"],
+    ["stickTitanium", "stickAluminium"],
+]
+tungstensteel-to-stainlesssteel = [
+    ["plateTungstenSteel", "plateStainlessSteel"],
+    ["stickTungstenSteel", "stickStainlessSteel"],
+]
+hv-to-lv = [
+    ["circuitAdvanced", "circuitBasic"]
+]
+ev-to-mv = [
+    ["circuitData", "circuitGood"]
+]
+
+
+[[rule]]
+name    = "AE2 script: 2x down tier"
+class   = "com.dreammaster.scripts.ScriptAppliedEnergistics2"
+methods = ["loadRecipes"]
+sites   = ["addShapedRecipe", "addShapelessRecipe"]
+use     = ["titanium-to-aluminium", "hv-to-lv", "ev-to-mv", "tungstensteel-to-stainlesssteel"]
+
+[[rule]]
+name    = "AE2FC script: 2x down tier"
+class   = "com.dreammaster.scripts.ScriptAE2FC"
+methods = ["loadRecipes"]
+sites   = ["addCraftingRecipe"]
+use     = ["titanium-to-aluminium", "hv-to-lv", "ev-to-mv", "tungstensteel-to-stainlesssteel"]
+# expect-min = 4

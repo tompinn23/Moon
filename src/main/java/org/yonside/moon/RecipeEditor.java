@@ -169,6 +169,14 @@ public class RecipeEditor<B extends RecipeMapBackend> {
             return matching(r -> anyStackEquals(r.mOutputs, stack));
         }
 
+        public EditBuilder outputtingAny(ItemStack... stack) {
+            return matching(r -> {
+                for(ItemStack s : stack) {
+                    if(anyStackEquals(r.mOutputs, s)) { return true; }
+                }
+                return false; });
+        }
+
         public EditBuilder consuming(ItemStack stack) {
             return matching(r -> anyStackEquals(r.mInputs, stack));
         }
@@ -403,5 +411,21 @@ public class RecipeEditor<B extends RecipeMapBackend> {
             .append(r.mEUt)
             .append("EU/t");
         return sb.toString();
+    }
+
+    public static void removeAssemblyLineRecipe(ItemStack... output) {
+        List<GTRecipe.RecipeAssemblyLine> doomed = new ArrayList<>();
+        for (GTRecipe.RecipeAssemblyLine recipe : GTRecipe.RecipeAssemblyLine.sAssemblylineRecipes) {
+            for(ItemStack in : output) {
+                if (GTUtility.areStacksEqual(recipe.mOutput, in, true)) {
+                    doomed.add(recipe);
+                }
+            }
+        }
+        if (doomed.isEmpty()) {
+            throw new IllegalStateException("no assembly line recipe found for any of" + Arrays.toString(output));
+        }
+        GTRecipe.RecipeAssemblyLine.sAssemblylineRecipes.removeAll(doomed);
+        Moon.LOG.info("removed {} assembly line recipe(s) for {}", doomed.size(), output);
     }
 }

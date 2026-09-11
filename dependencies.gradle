@@ -42,6 +42,8 @@ dependencies {
 
     shadowCompile("com.electronwill.night-config:toml:3.9.0")
 
+    runtimeOnlyNonPublishable(gtnh.angelica)
+
     runtimeOnlyNonPublishable(gtnh.newHorizonsCoreMod)
     runtimeOnlyNonPublishable(gtnh.avaritia)
     runtimeOnlyNonPublishable(gtnh.computronics)

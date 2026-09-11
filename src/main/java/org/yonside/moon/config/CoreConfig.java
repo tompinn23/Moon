@@ -133,15 +133,8 @@ public final class CoreConfig {
         verbose = toml.getOrElse("options.verbose", true);
         failFast = toml.getOrElse("options.fail-fast", true);
 
-        List<String> enabledFeatures = toml.getOrElse("features.enabled", Collections.emptyList());
-        for (String feature : enabledFeatures) {
-            try {
-                Feature val = Feature.valueOf(feature.replace('-', '_').toUpperCase(Locale.ROOT));
-                features.add(val);
-            } catch (IllegalArgumentException e) {
-                MoonCore.LOG.warn("unrecognized feature {}", feature);
-            }
-        }
+
+        features = readFeatures(toml);
 
 
         Map<String, Map<String, String>> presets = readPresets(toml);
@@ -155,6 +148,21 @@ public final class CoreConfig {
             byClass.size(),
             presets.size(),
             config.getPath());
+    }
+
+    private static Set<Feature> readFeatures(com.electronwill.nightconfig.core.Config toml) {
+        Set<Feature> features = new HashSet<>();
+
+        List<String> enabledFeatures = toml.getOrElse("features.enabled", Collections.emptyList());
+        for (String feature : enabledFeatures) {
+            try {
+                Feature val = Feature.valueOf(feature.replace('-', '_').toUpperCase(Locale.ROOT));
+                features.add(val);
+            } catch (IllegalArgumentException e) {
+                MoonCore.LOG.warn("unrecognized feature {}", feature);
+            }
+        }
+        return Collections.unmodifiableSet(features);
     }
 
     private static Map<String, Map<String, String>> readPresets(com.electronwill.nightconfig.core.Config toml) {

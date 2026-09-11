@@ -9,9 +9,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 public enum MoonCasings implements ICasing {
-    BoltedStainlessSteelCasing(() -> WerkstoffLoader.BWBlockCasings, 32185, 32185),
-    ReboltedStainlessSteelCasing(() -> WerkstoffLoader.BWBlockCasingsAdvanced, 32185, 32185)
-
+    BoltedSteelCasing(() -> WerkstoffLoader.BWBlockCasings, 32185, 32185),
+    ReboltedSteelCasing(() -> WerkstoffLoader.BWBlockCasingsAdvanced, 32185, 32185),
+    BoltedTitaniumCasing(() -> WerkstoffLoader.BWBlockCasings, 32186, 32186),
+    ReboltedTitaniumCasing(() -> WerkstoffLoader.BWBlockCasingsAdvanced, 32186, 32186),
+    BoltedTungstenSteelCasing(() -> WerkstoffLoader.BWBlockCasings, 32187, 32187),
+    ReboltedTungstenSteelCasing(() -> WerkstoffLoader.BWBlockCasingsAdvanced, 32187, 32187)
     ;
 
     public final BlockSupplier blockGetter;

@@ -8,6 +8,7 @@
   "plugin": "org.yonside.moon.mixins.MixinConfig",
   "mixins": [
     "voidminer.MixinVoidMinerCasings",
-    "voidminer.MixinVoidMinerTier"
+    "voidminer.MixinVoidMinerTier",
+    "voidminer.VoidMinerBaseAccessor"
   ]
 }

@@ -9,11 +9,23 @@ public class MoonMaterials {
         .addPrefix(OrePrefixes.blockCasing)
         .addPrefix(OrePrefixes.blockCasingAdvanced);
 
-    public static Werkstoff StainlessSteel = new Werkstoff(
-        Materials.StainlessSteel,
+    public static Werkstoff Steel = new Werkstoff(
+        Materials.Steel,
         ADD_CASINGS_ONLY,
         Werkstoff.Types.MIXTURE,
         31_766 + 419);
+
+    public static Werkstoff Titanium = new Werkstoff(
+        Materials.Titanium,
+        ADD_CASINGS_ONLY,
+        Werkstoff.Types.MIXTURE,
+        31_766 + 420);
+
+    public static Werkstoff TungstenSteel = new Werkstoff(
+        Materials.TungstenSteel,
+        ADD_CASINGS_ONLY,
+        Werkstoff.Types.MIXTURE,
+        31_766 + 421);
 
 
     public static void init() {

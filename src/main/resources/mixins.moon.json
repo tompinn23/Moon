@@ -9,6 +9,7 @@
   "mixins": [
     "voidminer.MixinVoidMinerCasings",
     "voidminer.MixinVoidMinerTier",
+    "voidminer.MixinVoidMinerTooltips",
     "voidminer.VoidMinerBaseAccessor"
   ]
 }

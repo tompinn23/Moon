@@ -1,8 +1,9 @@
 package org.yonside.moon.mixins.voidminer;
 
-import bwcrossmod.galacticgreg.MTEVoidMinerBase;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
+
+import bwcrossmod.galacticgreg.MTEVoidMinerBase;
 
 @Mixin(value = MTEVoidMinerBase.class, remap = false)
 public interface VoidMinerBaseAccessor {

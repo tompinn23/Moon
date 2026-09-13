@@ -58,7 +58,6 @@ public class RecipeEditor<B extends RecipeMapBackend> {
         return (RecipeEditor<B>) INSTANCES.computeIfAbsent(recipeMap, r -> new RecipeEditor<>((RecipeMap<B>) r));
     }
 
-
     public static void run() {
         INSTANCES.forEach((k, v) -> v.apply());
     }
@@ -171,10 +170,13 @@ public class RecipeEditor<B extends RecipeMapBackend> {
 
         public EditBuilder outputtingAny(ItemStack... stack) {
             return matching(r -> {
-                for(ItemStack s : stack) {
-                    if(anyStackEquals(r.mOutputs, s)) { return true; }
+                for (ItemStack s : stack) {
+                    if (anyStackEquals(r.mOutputs, s)) {
+                        return true;
+                    }
                 }
-                return false; });
+                return false;
+            });
         }
 
         public EditBuilder consuming(ItemStack stack) {
@@ -416,7 +418,7 @@ public class RecipeEditor<B extends RecipeMapBackend> {
     public static void removeAssemblyLineRecipe(ItemStack... output) {
         List<GTRecipe.RecipeAssemblyLine> doomed = new ArrayList<>();
         for (GTRecipe.RecipeAssemblyLine recipe : GTRecipe.RecipeAssemblyLine.sAssemblylineRecipes) {
-            for(ItemStack in : output) {
+            for (ItemStack in : output) {
                 if (GTUtility.areStacksEqual(recipe.mOutput, in, true)) {
                     doomed.add(recipe);
                 }

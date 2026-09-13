@@ -5,6 +5,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 
 public class MoonMaterials {
+
     private static final Werkstoff.GenerationFeatures ADD_CASINGS_ONLY = new Werkstoff.GenerationFeatures().disable()
         .addPrefix(OrePrefixes.blockCasing)
         .addPrefix(OrePrefixes.blockCasingAdvanced);
@@ -26,7 +27,6 @@ public class MoonMaterials {
         ADD_CASINGS_ONLY,
         Werkstoff.Types.MIXTURE,
         31_766 + 421);
-
 
     public static void init() {
         Moon.LOG.info("Load Elements from GT");

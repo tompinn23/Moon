@@ -1,22 +1,23 @@
 package org.yonside.moon.mod;
 
+import java.util.Arrays;
+import java.util.Objects;
+
+import org.yonside.moon.RecipeEditor;
+import org.yonside.moon.config.CoreConfig;
+import org.yonside.moon.config.Feature;
+
 import appeng.api.config.PowerMultiplier;
 import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.VoltageIndex;
 import gregtech.api.recipe.RecipeMaps;
-import org.yonside.moon.RecipeEditor;
-import org.yonside.moon.config.CoreConfig;
-import org.yonside.moon.config.Feature;
-
-import java.util.Arrays;
-import java.util.Objects;
 
 public class AppliedEnergistics2 {
 
     public static void loadComplete(FMLLoadCompleteEvent event) {
-        if(CoreConfig.isEnabled(Feature.AE2_DOWNTIER)) {
+        if (CoreConfig.isEnabled(Feature.AE2_DOWNTIER)) {
             RecipeEditor.of(RecipeMaps.assemblerRecipes)
                 .edit("AE2 controller")
                 .matching(

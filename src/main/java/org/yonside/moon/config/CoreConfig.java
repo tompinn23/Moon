@@ -6,8 +6,9 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
 
-import com.electronwill.nightconfig.toml.TomlFormat;
 import org.yonside.moon.coremod.MoonCore;
+
+import com.electronwill.nightconfig.toml.TomlFormat;
 
 public final class CoreConfig {
 
@@ -113,7 +114,7 @@ public final class CoreConfig {
 
     /** Called from FMLPlugin.injectData with the "configDir" value. */
     public static void loadFrom(File configDir) {
-        if(loaded) return;
+        if (loaded) return;
         File config = new File(configDir, FILE_NAME);
 
         if (!config.exists()) {
@@ -133,9 +134,7 @@ public final class CoreConfig {
         verbose = toml.getOrElse("options.verbose", true);
         failFast = toml.getOrElse("options.fail-fast", true);
 
-
         features = readFeatures(toml);
-
 
         Map<String, Map<String, String>> presets = readPresets(toml);
         byClass = groupByClass(readRules(toml, presets));
@@ -156,7 +155,9 @@ public final class CoreConfig {
         List<String> enabledFeatures = toml.getOrElse("features.enabled", Collections.emptyList());
         for (String feature : enabledFeatures) {
             try {
-                Feature val = Feature.valueOf(feature.replace('-', '_').toUpperCase(Locale.ROOT));
+                Feature val = Feature.valueOf(
+                    feature.replace('-', '_')
+                        .toUpperCase(Locale.ROOT));
                 features.add(val);
             } catch (IllegalArgumentException e) {
                 MoonCore.LOG.warn("unrecognized feature {}", feature);

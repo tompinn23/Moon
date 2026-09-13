@@ -1,21 +1,24 @@
 package org.yonside.moon;
 
-import bartworks.system.material.WerkstoffLoader;
-import com.gtnewhorizon.gtnhlib.util.data.BlockSupplier;
-import gregtech.api.casing.ICasing;
-import net.minecraft.block.Block;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Objects;
 
+import net.minecraft.block.Block;
+
+import org.jetbrains.annotations.NotNull;
+
+import com.gtnewhorizon.gtnhlib.util.data.BlockSupplier;
+
+import bartworks.system.material.WerkstoffLoader;
+import gregtech.api.casing.ICasing;
+
 public enum MoonCasings implements ICasing {
+
     BoltedSteelCasing(() -> WerkstoffLoader.BWBlockCasings, 32185, 32185),
     ReboltedSteelCasing(() -> WerkstoffLoader.BWBlockCasingsAdvanced, 32185, 32185),
     BoltedTitaniumCasing(() -> WerkstoffLoader.BWBlockCasings, 32186, 32186),
     ReboltedTitaniumCasing(() -> WerkstoffLoader.BWBlockCasingsAdvanced, 32186, 32186),
     BoltedTungstenSteelCasing(() -> WerkstoffLoader.BWBlockCasings, 32187, 32187),
-    ReboltedTungstenSteelCasing(() -> WerkstoffLoader.BWBlockCasingsAdvanced, 32187, 32187)
-    ;
+    ReboltedTungstenSteelCasing(() -> WerkstoffLoader.BWBlockCasingsAdvanced, 32187, 32187);
 
     public final BlockSupplier blockGetter;
     private volatile Block block;

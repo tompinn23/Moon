@@ -5,9 +5,9 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.yonside.moon.config.CoreConfig;
 
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
-import org.yonside.moon.config.CoreConfig;
 
 @IFMLLoadingPlugin.MCVersion("1.7.10")
 @IFMLLoadingPlugin.SortingIndex(1001)

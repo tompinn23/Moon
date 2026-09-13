@@ -11,8 +11,7 @@ import cpw.mods.fml.common.event.*;
     modid = Moon.MODID,
     version = Tags.VERSION,
     name = "Moon",
-    dependencies = "required-after:gregtech;" + "required-after:bartworks;"
-        + "required-after:gtnhintergalactic;",
+    dependencies = "required-after:gregtech;" + "required-after:bartworks;" + "required-after:gtnhintergalactic;",
     acceptedMinecraftVersions = "[1.7.10]")
 public class Moon {
 
@@ -38,12 +37,16 @@ public class Moon {
     @Mod.EventHandler
     public void loadComplete(FMLLoadCompleteEvent event) {
         proxy.loadComplete(event);
+
+        LOG.info("Dumping MTE ids");
+        Utilities.dumpMTEs(10);
     }
 
     @Mod.EventHandler
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
+
     }
 
     @Mod.EventHandler

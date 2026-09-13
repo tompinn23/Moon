@@ -5,9 +5,9 @@ import java.util.Map;
 import java.util.Optional;
 
 public enum Feature {
+
     VOIDMINER("voidminer"),
-    AE2_DOWNTIER("ae2downtier"),
-    ;
+    AE2_DOWNTIER("ae2downtier"),;
 
     private static final Map<String, Feature> MIXIN_SUBPACKAGES;
 
@@ -17,7 +17,6 @@ public enum Feature {
             MIXIN_SUBPACKAGES.put(feature.mixinPackage, feature);
         }
     }
-
 
     private final String mixinPackage;
 

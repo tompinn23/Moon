@@ -1,38 +1,34 @@
 package org.yonside.moon.metatileentity;
 
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
-import static gregtech.api.enums.HatchElement.*;
-import static gregtech.api.util.GTStructureUtility.*;
-
 import bartworks.API.BorosilicateGlass;
-import gregtech.api.casing.Casings;
-import gregtech.api.enums.Materials;
-import gregtech.api.metatileentity.implementations.MTEHatchEnergy;
-import gregtech.api.structure.error.StructureError;
-import gregtech.api.structure.error.StructureErrors;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
-
-import org.yonside.moon.recipes.MoonRecipes;
-
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
-
-import gregtech.api.GregTechAPI;
+import gregtech.api.casing.Casings;
+import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.MTEEnhancedMultiBlockBase;
+import gregtech.api.metatileentity.implementations.MTEHatchEnergy;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
+import gregtech.api.structure.error.StructureErrors;
 import gregtech.api.util.MultiblockTooltipBuilder;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
+import org.yonside.moon.recipes.MoonRecipes;
 
 import java.util.List;
+
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
+import static gregtech.api.enums.HatchElement.*;
+import static gregtech.api.util.GTStructureUtility.*;
 
 public class MTEFlotationCell extends MTEEnhancedMultiBlockBase<MTEFlotationCell> implements ISurvivalConstructable {
 
@@ -98,8 +94,6 @@ public class MTEFlotationCell extends MTEEnhancedMultiBlockBase<MTEFlotationCell
     public IStructureDefinition<MTEFlotationCell> getStructureDefinition() {
         return STRUCTURE_DEFINITION;
     }
-
-
 
     @Override
     public void construct(ItemStack trigger, boolean hintsOnly) {

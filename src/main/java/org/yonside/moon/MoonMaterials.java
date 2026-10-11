@@ -3,6 +3,8 @@ package org.yonside.moon;
 import bartworks.system.material.Werkstoff;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.TextureSet;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class MoonMaterials {
 
@@ -27,6 +29,28 @@ public class MoonMaterials {
         ADD_CASINGS_ONLY,
         Werkstoff.Types.MIXTURE,
         31_766 + 421);
+
+    public static Werkstoff SandSlurry = new Werkstoff(
+        new short[] {158, 160, 135, 255},
+        "Sand Slurry",
+        Werkstoff.Types.MIXTURE,
+        new Werkstoff.GenerationFeatures().disable()
+            .addCells(),
+        31_766 + 422,
+        TextureSet.SET_FLUID,
+        Pair.of(Materials.QuartzSand, 1),
+        Pair.of(Materials.Water, 2)
+    );
+
+    public static Werkstoff LowGradeMetalConcentrate = new Werkstoff(
+        new short[] {92, 85, 67, 255},
+        "Low-Grade Metal Concentrate",
+        Werkstoff.Types.MIXTURE,
+        new Werkstoff.GenerationFeatures().disable()
+            .addCells(),
+        31_766 + 423,
+        TextureSet.SET_FLUID
+    );
 
     public static void init() {
         Moon.LOG.info("Load Elements from GT");

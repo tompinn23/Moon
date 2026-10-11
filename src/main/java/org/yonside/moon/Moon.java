@@ -34,13 +34,7 @@ public class Moon {
         proxy.init(event);
     }
 
-    @Mod.EventHandler
-    public void loadComplete(FMLLoadCompleteEvent event) {
-        proxy.loadComplete(event);
 
-        LOG.info("Dumping MTE ids");
-        Utilities.dumpMTEs(10);
-    }
 
     @Mod.EventHandler
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
@@ -53,5 +47,13 @@ public class Moon {
     // register server commands in this event handler (Remove if not needed)
     public void serverStarting(FMLServerStartingEvent event) {
         proxy.serverStarting(event);
+    }
+
+    @Mod.EventHandler
+    public void loadComplete(FMLLoadCompleteEvent event) {
+        proxy.loadComplete(event);
+
+        LOG.info("Dumping MTE ids");
+        Utilities.dumpMTEs(10);
     }
 }

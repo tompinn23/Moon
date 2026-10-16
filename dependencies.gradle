@@ -43,6 +43,8 @@ dependencies {
     shadowCompile("com.electronwill.night-config:toml:3.9.0")
 
     runtimeOnlyNonPublishable(gtnh.angelica)
+    // NEI multiblock structure previews
+    runtimeOnlyNonPublishable(gtnh.blockRenderer6343)
 
     runtimeOnlyNonPublishable(gtnh.newHorizonsCoreMod)
     runtimeOnlyNonPublishable(gtnh.avaritia)

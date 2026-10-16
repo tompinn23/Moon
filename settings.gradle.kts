@@ -32,7 +32,7 @@ plugins {
 plink {
     catalogs {
         create("gtnh") {
-            version = "2.9.0-beta-3"
+            version = "2.9.0-RC-2"
         }
     }
 }

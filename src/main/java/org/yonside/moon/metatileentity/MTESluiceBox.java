@@ -1,151 +1,113 @@
 package org.yonside.moon.metatileentity;
 
-import com.gtnewhorizon.structurelib.alignment.IAlignment;
-import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
-import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
-import com.gtnewhorizon.structurelib.alignment.enumerable.ExtendedFacing;
-import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
-import gregtech.api.casing.Casings;
-import gregtech.api.enums.Materials;
-import gregtech.api.interfaces.ISecondaryDescribable;
-import gregtech.api.interfaces.ITexture;
-import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.interfaces.modularui.IGetTitleColor;
-import gregtech.api.interfaces.tileentity.ICasingTextureProvider;
-import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.interfaces.tileentity.RecipeMapWorkable;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.recipe.RecipeMap;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
-
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
+import static gregtech.api.util.GTStructureUtility.ofAnyWater;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
-public class MTESluiceBox extends MetaTileEntity implements IAlignment, ISurvivalConstructable, RecipeMapWorkable, IGetTitleColor, ISecondaryDescribable, ICasingTextureProvider {
+import net.minecraft.item.ItemStack;
 
+import org.yonside.moon.metatileentity.base.MTEPrimitiveMultiBase;
+import org.yonside.moon.metatileentity.base.MoonStructure;
+import org.yonside.moon.recipes.MoonRecipeMaps;
 
-    private static final IStructureDefinition<MTESluiceBox> STRUCTURE_DEFINITION = IStructureDefinition.<MTESluiceBox>builder()
-        .addShape("main",
+import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
+
+import gregtech.api.casing.Casings;
+import gregtech.api.enums.Materials;
+import gregtech.api.interfaces.IIconContainer;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.recipe.RecipeMap;
+import gregtech.api.util.MultiblockTooltipBuilder;
+
+/** Stone age gravity separation: a riffled wooden trough with water running down it. */
+public class MTESluiceBox extends MTEPrimitiveMultiBase<MTESluiceBox> {
+
+    public static final int INPUT_SLOTS = 1, OUTPUT_SLOTS = 5;
+
+    private static final String STRUCTURE_PIECE_MAIN = "main";
+    private static final int OFFSET_X = 1;
+    private static final int OFFSET_Y = 1;
+    private static final int OFFSET_Z = 0;
+
+    private static final IStructureDefinition<MTESluiceBox> STRUCTURE_DEFINITION = IStructureDefinition
+        .<MTESluiceBox>builder()
+        .addShape(
+            STRUCTURE_PIECE_MAIN,
             transpose(
-                new String[][]{
-                    {"ABA","ADA","ADA","ADA","ADA","ACA","AAA"},
-                    {"A~A","AAA","AAA","AAA","AAA","AAA","AAA"},
-                }
-            ))
+                new String[][] { { "ABA", "ADA", "ADA", "ADA", "ADA", "ACA", "AAA" },
+                    { "A~A", "AAA", "AAA", "AAA", "AAA", "AAA", "AAA" }, }))
         .addElement('A', Casings.PrimitiveWoodenCasing.asElement())
         .addElement('B', ofFrame(Materials.Wood))
-        .addElement('C', ofBlockAnyMeta(Blocks.water, 1))
-        .addElement('D', ofBlockAnyMeta(Blocks.flowing_water, 1))
+        // Source block at the back of the trough
+        .addElement('C', ofAnyWater())
+        // Water running down the trough; settled flowing water turns into still water with meta > 0
+        .addElement('D', ofAnyWater(true))
         .build();
 
-
     public MTESluiceBox(int aID, String aName, String aNameRegional) {
-        super(aID, aName, aNameRegional, 6);
+        super(aID, aName, aNameRegional, INPUT_SLOTS, OUTPUT_SLOTS);
     }
 
     public MTESluiceBox(String aName) {
-        super(aName, 6);
-    }
-
-    @Override
-    public ExtendedFacing getExtendedFacing() {
-        return ExtendedFacing.of(getBaseMetaTileEntity().getFrontFacing());
-    }
-
-    @Override
-    public void setExtendedFacing(ExtendedFacing alignment) {
-        getBaseMetaTileEntity().setFrontFacing(alignment.getDirection());
-    }
-
-    @Override
-    public IAlignmentLimits getAlignmentLimits() {
-        return (d, r, f) -> (d.flag & (ForgeDirection.UP.flag | ForgeDirection.DOWN.flag)) == 0 && r.isNotRotated()
-            && f.isNotFlipped();
-    }
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        STRUCTURE_DEFINITION.buildOrHints(
-            this,
-            stackSize,
-            "main",
-            getBaseMetaTileEntity().getWorld(),
-            getExtendedFacing(),
-            getBaseMetaTileEntity().getXCoord(),
-            getBaseMetaTileEntity().getYCoord(),
-            getBaseMetaTileEntity().getZCoord(),
-            1,
-            2,
-            0,
-            hintsOnly);
-    }
-
-    @Override
-    public String[] getStructureDescription(ItemStack stackSize) {
-        return new String[0];
-    }
-
-    @Override
-    public String[] getPrimaryDescription() {
-        return new String[0];
-    }
-
-    @Override
-    public String[] getSecondaryDescription() {
-        return new String[0];
-    }
-
-    @Override
-    public byte getTileEntityBaseType() {
-        return 0;
+        super(aName, INPUT_SLOTS, OUTPUT_SLOTS);
     }
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity iGregTechTileEntity) {
-        return null;
+        return new MTESluiceBox(this.mName);
     }
 
     @Override
-    public void saveNBTData(NBTTagCompound nbtTagCompound) {
-
+    public IStructureDefinition<MTESluiceBox> getStructureDefinition() {
+        return STRUCTURE_DEFINITION;
     }
 
     @Override
-    public void loadNBTData(NBTTagCompound nbtTagCompound) {
-
+    protected boolean checkStructure() {
+        return checkPiece(STRUCTURE_PIECE_MAIN, OFFSET_X, OFFSET_Y, OFFSET_Z);
     }
 
     @Override
-    public boolean allowPullStack(IGregTechTileEntity iGregTechTileEntity, int i, ForgeDirection forgeDirection, ItemStack itemStack) {
-        return false;
+    protected void constructStructure(ItemStack trigger, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, trigger, hintsOnly, OFFSET_X, OFFSET_Y, OFFSET_Z);
     }
 
     @Override
-    public boolean allowPutStack(IGregTechTileEntity iGregTechTileEntity, int i, ForgeDirection forgeDirection, ItemStack itemStack) {
-        return false;
+    protected int survivalConstructStructure(ItemStack trigger, int elementBudget, ISurvivalBuildEnvironment env) {
+        return survivalBuildPiece(STRUCTURE_PIECE_MAIN, trigger, OFFSET_X, OFFSET_Y, OFFSET_Z, elementBudget, env);
     }
 
     @Override
-    public String[] getDescription() {
-        return new String[0];
+    protected MultiblockTooltipBuilder createTooltip() {
+        MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        tt.addMachineType("Sluice Box")
+            .addInfo("Washes heavy minerals out of sand, crushed ore and gravel")
+            .addInfo("Recovery is poor: most of the metal is lost to tailings")
+            .addInfo("All input/output is done manually through the controller")
+            .beginStructureBlock(3, 2, 7, false)
+            .addController("Front center, bottom layer")
+            .addCasingInfoExactly("Primitive Wooden Casing", 35, false)
+            .addOtherStructurePart("Wood Frame Box", "Above the controller")
+            .addOtherStructurePart("Water Source", "Back of the trough")
+            .addOtherStructurePart("Flowing Water", "Running down the trough to the front")
+            .toolTipFinisher("Moon");
+        return tt;
     }
 
     @Override
-    public ITexture[] getTexture(IGregTechTileEntity iGregTechTileEntity, ForgeDirection forgeDirection, ForgeDirection forgeDirection1, int i, boolean b, boolean b1) {
-        return new ITexture[0];
+    protected Casings getCasing() {
+        return Casings.PrimitiveWoodenCasing;
     }
 
     @Override
-    public ITexture getCasingTexture() {
-        return null;
+    protected IIconContainer[] getFrontOverlays() {
+        return MoonStructure.WASHER;
     }
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return null;
+        return MoonRecipeMaps.sluiceBoxRecipes;
     }
 }

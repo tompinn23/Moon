@@ -24,7 +24,16 @@ public class RecipeModification {
             voidminer();
         }
 
+        // The addon owns Kyanite electrolysis: drop GT's generated one, add ours once the edits have run
+        RecipeEditor.of(RecipeMaps.electrolyzerRecipes)
+            .edit("replace kyanite electrolysis")
+            .consuming(Materials.Kyanite.getDust(1))
+            .expectAtLeast(0)
+            .queueRemoval();
+
         RecipeEditor.run();
+
+        MoonRecipes.addKyaniteElectrolysis();
     }
 
     public static void voidminer() {
